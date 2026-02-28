@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANOMALY_404</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Menu Overlay -->
+        <div id="menu-overlay" class="overlay active">
+            <div class="content glass">
+                <h1>ANOMALY_404</h1>
+                <p class="subtitle">"Find the anomaly before your sanity runs out."</p>
+                <div class="buttons">
+                    <button id="start-btn">START MISSION</button>
+                    <button id="instr-btn">INSTRUCTIONS</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HUD Overlay -->
+        <div id="hud" class="overlay hidden">
+            <div class="hud-item" id="timer-container">
+                <span>TIME:</span> <span id="timer-val">30</span>s
+            </div>
+            <div class="hud-item" id="loop-container">
+                LOOP: <span id="loop-val">1</span>
+            </div>
+            <div class="hud-item" id="sanity-container">
+                SANITY: <span id="sanity-vals">❤️❤️❤️</span>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div id="modal" class="modal hidden">
+            <div class="modal-content glass">
+                <h2>MISSION BRIEFING</h2>
+                <ul>
+                    <li>You are trapped in a looping room.</li>
+                    <li>Each loop looks identical, but ONE thing might change.</li>
+                    <li>Identify the <strong>anomaly</strong> by clicking on it.</li>
+                    <li>Move with <strong>WASD</strong> or <strong>Arrow Keys</strong>.</li>
+                    <li>Wrong clicks or running out of time drains your sanity.</li>
+                </ul>
+                <button id="close-modal">UNDERSTOOD</button>
+            </div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="game-over" class="overlay hidden">
+            <div class="content glass">
+                <h1 class="glitch" data-text="ERROR_404">ERROR_404</h1>
+                <p>Sanity Depleted.</p>
+                <p>Loops Survived: <span id="final-loops">0</span></p>
+                <button id="restart-btn">RESET SIMULATION</button>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
