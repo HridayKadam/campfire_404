@@ -1,28 +1,29 @@
-# ANOMALY_404
+# ANOMALY_404 (Beneath the Surface)
 
 **"Find the anomaly before your sanity runs out."**
 
-ANOMALY_404 is a psychological horror looping game built for a hackathon. You are trapped in a room that resets every time you exit (or time runs out). Each loop looks identical, but one subtle anomaly might appear. Your task is to find it.
+ANOMALY_404 is a psychological horror descent game built for the "Beneath the Surface" hackathon. You are descending into a recursive simulation where each meter deeper marks a shift in reality. Identify the anomalies to stabilize your descent.
 
 ## 🎮 Gameplay
-- **Objective**: Identify the single anomaly in the room by clicking on it.
+- **Objective**: Identify the single anomaly in the room to reach the next depth.
 - **Controls**: 
   - **WASD / Arrow Keys**: Move the player.
   - **Mouse Click**: Interact with objects to report an anomaly.
-- **Sanity**: You start with 3 sanity points. Losing sanity (wrong click or timeout) lead to an eventual game over.
-- **Looping**: Surving loops increases the difficulty by reducing the time limit.
+- **Stability & Sync**: Your synchronization (sync) with the surface is fragile. Instability (wrong clicks or timeout) leads to synchronization failure.
+- **Descent**: The further you go, the more the reality "beneath the surface" begins to decay.
 
 ## 🛠️ Tech Stack
 - **Pure HTML5**
-- **Vanilla CSS** (No frameworks, custom dark horror aesthetic)
+- **Vanilla CSS** (Scanlines, vignettes, and depth-based color shifts)
 - **Vanilla JavaScript** (No external libraries)
 - **Canvas API** for all rendering
 - **Web Audio API** for procedural sound effects
 
 ## 🧩 Features
-- **Loop-based Anomaly System**: 10+ randomized visual anomalies.
-- **Dynamic Difficulty**: Timer scales down every 3 loops.
-- **Atmospheric Polish**: Screen flicker effects, low-frequency ambient hum, and glassmorphism UI.
+- **Descent System**: Track Depth in meters.
+- **Visual Decay**: The room gets darker and more distorted the deeper you go.
+- **Thematic Anomalies**: Eyes in the darkness, blood on the rug, and shifting shadows.
+- **Dynamic Difficulty**: Stability timer scales down with depth.
 - **Modular Architecture**: Clean class-based structure (`Game`, `Player`, `Room`, `AnomalyManager`).
 
 ## 📁 File Structure

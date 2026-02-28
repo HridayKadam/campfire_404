@@ -1,8 +1,8 @@
 :root {
-    --bg-color: #0a0a0a;
-    --text-color: #e0e0e0;
-    --accent-color: #ff4444;
-    --glass-bg: rgba(20, 20, 20, 0.8);
+    --bg-color: #050505;
+    --text-color: #d0d0d0;
+    --accent-color: #aa0000;
+    --glass-bg: rgba(10, 10, 10, 0.9);
     --font-main: 'Courier New', Courier, monospace;
 }
 
@@ -27,9 +27,34 @@ body {
     position: relative;
     width: 800px;
     height: 600px;
-    border: 2px solid #333;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid #1a1a1a;
+    box-shadow: 0 0 100px rgba(170, 0, 0, 0.1);
     background: #000;
+    overflow: hidden;
+}
+
+#game-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(to right, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 6;
 }
 
 canvas {
@@ -125,15 +150,23 @@ button:hover {
     font-size: 1.2rem;
 }
 
-#timer-container { color: var(--accent-color); }
-#sanity-values { color: #ff6666; }
+#timer-container {
+    color: var(--accent-color);
+}
+
+#sanity-values {
+    color: #ff6666;
+}
 
 /* Modal */
 .modal {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 100;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -169,12 +202,29 @@ button:hover {
 
 /* Flicker Animation */
 @keyframes flicker {
-    0% { opacity: 1; }
-    5% { opacity: 0.8; }
-    10% { opacity: 1; }
-    15% { opacity: 0.9; }
-    20% { opacity: 1; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+
+    5% {
+        opacity: 0.8;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    15% {
+        opacity: 0.9;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 .flicker {
@@ -186,10 +236,14 @@ button:hover {
     position: relative;
 }
 
-.glitch::before, .glitch::after {
+.glitch::before,
+.glitch::after {
     content: attr(data-text);
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: var(--bg-color);
 }
 
@@ -208,19 +262,53 @@ button:hover {
 }
 
 @keyframes glitch-anim {
-    0% { clip: rect(31px, 9999px, 94px, 0); }
-    20% { clip: rect(62px, 9999px, 42px, 0); }
-    40% { clip: rect(16px, 9999px, 78px, 0); }
-    60% { clip: rect(43px, 9999px, 11px, 0); }
-    80% { clip: rect(25px, 9999px, 81px, 0); }
-    100% { clip: rect(89px, 9999px, 24px, 0); }
+    0% {
+        clip: rect(31px, 9999px, 94px, 0);
+    }
+
+    20% {
+        clip: rect(62px, 9999px, 42px, 0);
+    }
+
+    40% {
+        clip: rect(16px, 9999px, 78px, 0);
+    }
+
+    60% {
+        clip: rect(43px, 9999px, 11px, 0);
+    }
+
+    80% {
+        clip: rect(25px, 9999px, 81px, 0);
+    }
+
+    100% {
+        clip: rect(89px, 9999px, 24px, 0);
+    }
 }
 
 @keyframes glitch-anim2 {
-    0% { clip: rect(65px, 9999px, 100px, 0); }
-    20% { clip: rect(10px, 9999px, 50px, 0); }
-    40% { clip: rect(80px, 9999px, 20px, 0); }
-    60% { clip: rect(40px, 9999px, 90px, 0); }
-    80% { clip: rect(20px, 9999px, 30px, 0); }
-    100% { clip: rect(70px, 9999px, 10px, 0); }
+    0% {
+        clip: rect(65px, 9999px, 100px, 0);
+    }
+
+    20% {
+        clip: rect(10px, 9999px, 50px, 0);
+    }
+
+    40% {
+        clip: rect(80px, 9999px, 20px, 0);
+    }
+
+    60% {
+        clip: rect(40px, 9999px, 90px, 0);
+    }
+
+    80% {
+        clip: rect(20px, 9999px, 30px, 0);
+    }
+
+    100% {
+        clip: rect(70px, 9999px, 10px, 0);
+    }
 }

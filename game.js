@@ -13,7 +13,7 @@ class Game {
         this.canvas.height = this.height;
 
         this.state = 'menu'; // menu, playing, gameover
-        this.loopCount = 1;
+        this.depth = 0; // Starts at 0m
         this.sanity = 3;
         this.timer = 30;
         this.lastTime = 0;
@@ -45,14 +45,14 @@ class Game {
 
     startGame(isRestart = false) {
         if (isRestart) {
-            this.loopCount = 1;
+            this.depth = 0;
             this.sanity = 3;
         }
-        if (this.loopCount === 1) this.audio.playAmbient();
+        if (this.depth === 0) this.audio.playAmbient();
 
         this.state = 'playing';
-        this.timer = 30 - Math.floor(this.loopCount / 3) * 2;
-        if (this.timer < 10) this.timer = 10;
+        this.timer = 30 - Math.floor(this.depth / 50) * 2;
+        if (this.timer < 8) this.timer = 8;
 
         this.anomalyManager.generateAnomaly();
         this.player.reset();
@@ -85,7 +85,7 @@ class Game {
     }
 
     nextLoop() {
-        this.loopCount++;
+        this.depth += 10; // Descend 10m per success
         this.startGame();
     }
 
@@ -100,7 +100,7 @@ class Game {
 
     gameOver() {
         this.state = 'gameover';
-        document.getElementById('final-loops').innerText = this.loopCount - 1;
+        document.getElementById('final-loops').innerText = this.depth;
         document.getElementById('game-over').classList.remove('hidden');
         document.getElementById('hud').classList.add('hidden');
     }
@@ -112,7 +112,7 @@ class Game {
 
     updateHUD() {
         document.getElementById('timer-val').innerText = Math.ceil(this.timer);
-        document.getElementById('loop-val').innerText = this.loopCount;
+        document.getElementById('loop-val').innerText = this.depth;
         document.getElementById('sanity-vals').innerText = '❤️'.repeat(this.sanity);
     }
 
@@ -224,12 +224,17 @@ class Room {
 
     draw() {
         const ctx = this.game.ctx;
-        // Background
-        ctx.fillStyle = '#111';
+        const depthFactor = Math.min(this.game.depth / 150, 0.8);
+
+        // Background - Gets darker with depth
+        const bgColor = 17 - Math.floor(depthFactor * 15);
+        ctx.fillStyle = `rgb(${bgColor}, ${bgColor}, ${bgColor})`;
         ctx.fillRect(0, 0, this.game.width, this.game.height);
 
-        // Floor texture
-        ctx.strokeStyle = '#1a1a1a';
+        // Floor texture - subtle color shift
+        const gridColor = 26 - Math.floor(depthFactor * 20);
+        const gridRed = gridColor + Math.floor(depthFactor * 40);
+        ctx.strokeStyle = `rgb(${gridRed}, ${gridColor}, ${gridColor})`;
         ctx.lineWidth = 1;
         for (let i = 0; i < this.game.width; i += 40) {
             ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, this.game.height); ctx.stroke();
@@ -254,6 +259,10 @@ class Room {
 
             if (obj.id === 'lamp' && obj.flicker && Math.random() > 0.8) {
                 ctx.globalAlpha = 0.3;
+            }
+            if (obj.isBlood) {
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = 'rgba(255,0,0,0.7)';
             }
 
             if (obj.type === 'rect') {
@@ -285,6 +294,13 @@ class Room {
                     ctx.lineTo(obj.x, obj.y - (obj.r - 5));
                     ctx.stroke();
                 }
+                // Eye details
+                if (obj.isEye) {
+                    ctx.fillStyle = '#000';
+                    ctx.beginPath();
+                    ctx.arc(obj.x, obj.y, obj.r / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
             ctx.restore();
         });
@@ -301,15 +317,15 @@ class AnomalyManager {
         this.currentAnomaly = null;
         this.anomalies = [
             { id: 'missing_chair', target: 'chair', effect: (obj) => obj.hidden = true },
-            { id: 'extra_box', effect: (objs) => objs.push({ id: 'extra', x: 100, y: 400, w: 40, h: 40, color: '#444', type: 'rect' }) },
+            { id: 'extra_eye', effect: (objs) => objs.push({ id: 'eye', x: 120, y: 15, r: 8, color: '#ff0000', type: 'circle', isEye: true }) },
             { id: 'wrong_clock', target: 'clock', effect: (obj) => obj.anomaly_time = true },
-            { id: 'red_lamp', target: 'lamp', effect: (obj) => obj.color = '#ff0000' },
+            { id: 'blood_rug', target: 'rug', effect: (obj) => { obj.color = '#450000'; obj.isBlood = true; } },
             { id: 'flipped_table', target: 'table', effect: (obj) => { obj.w = 120; obj.h = 200; obj.x = 340; obj.y = 200; } },
             { id: 'rotated_rug', target: 'rug', effect: (obj) => obj.rotation = Math.PI / 4 },
-            { id: 'flicker_lamp', target: 'lamp', effect: (obj) => obj.flicker = true },
-            { id: 'blue_window', target: 'window', effect: (obj) => obj.color = '#0000ff' },
+            { id: 'vortex_lamp', target: 'lamp', effect: (obj) => { obj.color = '#4a148c'; obj.flicker = true; } },
+            { id: 'red_window', target: 'window', effect: (obj) => obj.color = '#ff0000' },
             { id: 'shifted_door', target: 'door', effect: (obj) => obj.x += 50 },
-            { id: 'invisible_window', target: 'window', effect: (obj) => obj.hidden = true }
+            { id: 'shadow_person', effect: (objs) => objs.push({ id: 'shadow', x: 600, y: 400, w: 20, h: 60, color: 'rgba(0,0,0,0.8)', type: 'rect' }) }
         ];
     }
 
@@ -317,9 +333,8 @@ class AnomalyManager {
         this.game.room.reset();
         this.currentAnomaly = null;
 
-        // 30% chance of NO anomaly in some games, but prompt says "ONE anomaly appears" 
-        // to keep it simple, let's always have one except maybe loop 1 (the tutorial anchor)
-        if (this.game.loopCount === 1) return;
+        // No anomaly at surface (0m)
+        if (this.game.depth === 0) return;
 
         const randomIndex = Math.floor(Math.random() * this.anomalies.length);
         const anomaly = this.anomalies[randomIndex];
@@ -337,14 +352,14 @@ class AnomalyManager {
     checkClick(mx, my) {
         if (!this.currentAnomaly) return false;
 
-        // Check if clicked object is the target of the anomaly
-        // Or if it's the extra object
         const clickedObj = this.getClickedObject(mx, my);
 
         if (this.currentAnomaly.target) {
             return clickedObj && clickedObj.id === this.currentAnomaly.target;
-        } else if (this.currentAnomaly.id === 'extra_box') {
-            return clickedObj && clickedObj.id === 'extra';
+        } else if (this.currentAnomaly.id === 'extra_eye') {
+            return clickedObj && clickedObj.id === 'eye';
+        } else if (this.currentAnomaly.id === 'shadow_person') {
+            return clickedObj && clickedObj.id === 'shadow';
         }
 
         return false;
