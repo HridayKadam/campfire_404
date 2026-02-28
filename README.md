@@ -4,13 +4,26 @@
 
 ANOMALY_404 is a psychological horror descent game built for the "Beneath the Surface" hackathon. You are descending into a recursive simulation where each meter deeper marks a shift in reality. Identify the anomalies to stabilize your descent.
 
-## 🎮 Gameplay
-- **Objective**: Identify the single anomaly in the room to reach the next depth.
-- **Controls**: 
-  - **WASD / Arrow Keys**: Move the player.
-  - **Mouse Click**: Interact with objects to report an anomaly.
-- **Stability & Sync**: Your synchronization (sync) with the surface is fragile. Instability (wrong clicks or timeout) leads to synchronization failure.
-- **Descent**: The further you go, the more the reality "beneath the surface" begins to decay.
+## 🕹️ How to Play
+1. **The Objective**: You are 0 meters deep at the surface. Your goal is to descend as deep as possible.
+2. **The First Loop**: The first room (0m) is your "anchor." It is always clean and contains no anomalies. Memorize the placement of:
+   - The Clock (Position of hands)
+   - The Rug (Color and rotation)
+   - The Lamp (Color and stability)
+   - The Furniture (Table and Chair placement)
+   - The Window and Door
+3. **The Descent**: Click the **DESCEND** button. You will move to 10m deep.
+4. **Spot the Anomaly**: In every room after 0m, **ONE** thing might be different. It could be a color change, a missing object, or something appearing that wasn't there before.
+5. **Report**: If you see an anomaly, **CLICK DIRECTLY ON IT**. 
+   - **Correct**: You descend another 10m and your stability is restored.
+   - **Incorrect**: You lose a Sync heart.
+6. **Time Limit**: The "STABILITY" bar is your timer. If it runs out, your synchronization fails and you lose a heart.
+7. **Game Over**: If you lose all 3 hearts, the simulation ends.
+
+## ⌨️ Controls
+- **WASD / Arrow Keys**: Move your character around the room.
+- **Left Mouse Click**: Click on objects to report anomalies.
+- **Space/Enter**: Can be used to interact with menus.
 
 ## 🛠️ Tech Stack
 - **Pure HTML5**

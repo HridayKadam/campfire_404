@@ -32,7 +32,13 @@ class Game {
     }
 
     initEventListeners() {
-        window.addEventListener('keydown', e => this.keys[e.code] = true);
+        // Prevent scrolling with arrows/WASD
+        window.addEventListener('keydown', e => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(e.code)) {
+                e.preventDefault();
+            }
+            this.keys[e.code] = true;
+        });
         window.addEventListener('keyup', e => this.keys[e.code] = false);
 
         document.getElementById('start-btn').onclick = () => this.startGame();
@@ -40,7 +46,11 @@ class Game {
         document.getElementById('instr-btn').onclick = () => this.toggleModal(true);
         document.getElementById('close-modal').onclick = () => this.toggleModal(false);
 
-        this.canvas.addEventListener('mousedown', e => this.handleClick(e));
+        this.canvas.addEventListener('mousedown', e => {
+            // Ensure focus for keyboard input in embeds
+            this.canvas.focus();
+            this.handleClick(e);
+        });
     }
 
     startGame(isRestart = false) {
